@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Risk: World Domination</title>
+<link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body>
+<div id="app">
+  <div id="topbar">
+    <div class="title">⚔ RISK <small>World Domination</small></div>
+    <div class="turn-pill">
+      <span class="turn-dot" id="turnDot"></span>
+      <span id="turnName">—</span>
+      <span class="phase" id="phaseLbl">—</span>
+    </div>
+    <div class="reinf" id="reinfBox" style="display:none"><span id="armiesLbl">Armies left:</span> <b id="reinfNum">0</b></div>
+    <div class="spacer"></div>
+    <button class="btn gold" id="cardsBtn">🂠 <span id="cardsLbl">Cards</span> <span id="cardCount">0</span></button>
+    <button class="btn primary" id="phaseBtn">Next</button>
+    <button class="icon-btn" id="namesBtn" title="Toggle names">🏷</button>
+    <button class="icon-btn" id="musicBtn" title="Music">🎵</button>
+    <button class="icon-btn" id="sfxBtn" title="Sound FX">🔊</button>
+    <button class="icon-btn" id="menuBtn" title="Menu (pause / restart / quit)">☰</button>
+  </div>
+
+  <div id="stage">
+    <div id="mapWrap"><svg id="map" class="shownames" viewBox="0 0 1300 828" preserveAspectRatio="xMidYMid meet"></svg></div>
+    <div id="infoPanel">
+      <button class="info-collapse" id="infoToggle" title="Hide panel">‹</button>
+      <div id="reinfPanel"></div>
+      <div id="contPanel"></div>
+    </div>
+    <div id="players"></div>
+    <div id="log"></div>
+    <div id="combat"></div>
+    <div id="banner"></div>
+  </div>
+</div>
+
+<!-- Home / main menu overlay -->
+<div class="overlay" id="home">
+  <div class="home-card">
+    <div class="home-logo">⚔ RISK</div>
+    <div class="home-sub">WORLD DOMINATION</div>
+
+    <!-- PLAY section -->
+    <div class="home-sec" data-sec="play">
+      <p class="home-tag" data-i18n="home_tag"></p>
+
+      <div class="opt-label" data-i18n="home_generals"></div>
+      <div class="pcount" id="pcount"></div>
+
+      <div class="opt-label" data-i18n="home_difficulty"></div>
+      <div class="diffrow" id="diffRow"></div>
+
+      <div class="home-summary" id="homeSummary"></div>
+
+      <button class="btn primary home-start" id="startBtn" data-i18n="home_start"></button>
+      <div class="home-links">
+        <button class="btn ghost" data-go="about" data-i18n="home_howto"></button>
+        <button class="btn ghost" data-go="settings" data-i18n="home_settings"></button>
+      </div>
+    </div>
+
+    <!-- ABOUT section -->
+    <div class="home-sec" data-sec="about" hidden>
+      <h2 data-i18n="about_title"></h2>
+      <div class="about-body" data-i18n-html="about_html"></div>
+      <button class="btn primary" data-go="play" data-i18n="back"></button>
+    </div>
+
+    <!-- SETTINGS section -->
+    <div class="home-sec" data-sec="settings" hidden>
+      <h2 data-i18n="set_title"></h2>
+      <div class="set-row"><span data-i18n="set_lang"></span>
+        <button class="toggle" id="setLang">English</button></div>
+      <div class="set-row"><span data-i18n="set_music"></span>
+        <button class="toggle on" id="setMusic"></button></div>
+      <div class="set-row"><span data-i18n="set_sfx"></span>
+        <button class="toggle on" id="setSfx"></button></div>
+      <div class="set-row"><span data-i18n="set_names"></span>
+        <button class="toggle on" id="setNames"></button></div>
+      <p class="hint" data-i18n="set_hint"></p>
+      <button class="btn primary" data-go="play" data-i18n="back"></button>
+    </div>
+  </div>
+</div>
+
+<!-- generic modal mount -->
+<div id="modalMount"></div>
+
+<script src="js/map-data.js?v=2"></script>
+<script src="js/audio.js?v=2"></script>
+<script src="js/game.js?v=2"></script>
+</body>
+</html>
