@@ -293,7 +293,7 @@ function startGame(numPlayers, difficulty) {
   G.turn = 0; G.setsTraded = 0;
   buildMap();
   // on phones: collapse the side panel and centre the larger, pannable map
-  if (window.matchMedia("(max-width:760px)").matches) {
+  if (window.matchMedia("(max-width:940px)").matches) {
     $("infoPanel").classList.add("collapsed");
     const w = $("mapWrap");
     requestAnimationFrame(() => {
