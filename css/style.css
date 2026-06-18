@@ -59,9 +59,10 @@ svg#map{width:100%;height:100%;touch-action:manipulation}
 .terr.target{stroke:var(--gold);stroke-width:3.2;filter:drop-shadow(0 0 7px var(--gold))}
 .sea{stroke:#bcd4f0;stroke-width:2.2;stroke-dasharray:2 8;stroke-linecap:round;fill:none;opacity:.7}
 .sea-dot{fill:#dce9fb;opacity:.85}
-.badge{stroke:#0a1426;stroke-width:1.5}
+.badge{stroke:#0a1426;stroke-width:1.5;transform-box:fill-box;transform-origin:center}
 .btxt{fill:#fff;font-weight:bold;text-anchor:middle;dominant-baseline:central;
-  font-size:15px;pointer-events:none;paint-order:stroke;stroke:#0a1426;stroke-width:2.5px}
+  font-size:15px;pointer-events:none;paint-order:stroke;stroke:#0a1426;stroke-width:2.5px;
+  transform-box:fill-box;transform-origin:center}
 .tname{fill:#f2f7ff;font-size:9.5px;font-weight:bold;text-anchor:middle;pointer-events:none;opacity:0;
   paint-order:stroke;stroke:#0a1426;stroke-width:2.4px;letter-spacing:.2px}
 svg#map.shownames .tname{opacity:.95}
@@ -165,6 +166,16 @@ input[type=range]{flex:1;accent-color:var(--gold)}
   100%{transform:translate(-50%,-50%) scale(9);opacity:0}}
 .flash-conq{animation:flashConq .9s ease}
 @keyframes flashConq{0%,100%{filter:none}40%{filter:brightness(2.2) saturate(1.4)}}
+/* reinforce placement: a bright ring expanding outward from the country */
+.placering{position:absolute;pointer-events:none;z-index:36;width:30px;height:30px;border-radius:50%;
+  border:4px solid #8ffbe0;box-shadow:0 0 16px #8ffbe0,inset 0 0 10px rgba(143,251,224,.7);
+  animation:placering .6s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes placering{0%{transform:translate(-50%,-50%) scale(.25);opacity:0}
+  20%{opacity:1}100%{transform:translate(-50%,-50%) scale(3.4);opacity:0}}
+/* troop movement: a bright glowing disc that travels into the country */
+.march-disc{position:absolute;pointer-events:none;z-index:35;width:26px;height:26px;border-radius:50%;
+  transform:translate(-50%,-50%);box-shadow:0 0 14px 3px rgba(255,255,255,.55);
+  border:2px solid rgba(255,255,255,.9)}
 
 /* ---------- left info panel ---------- */
 #infoPanel{position:absolute;top:10px;left:10px;width:248px;z-index:16;display:flex;flex-direction:column;gap:8px;
@@ -263,18 +274,45 @@ input[type=range]{flex:1;accent-color:var(--gold)}
 
 /* responsive / mobile */
 @media (max-width:760px){
+  /* slim top bar */
+  #topbar{padding:5px 7px;gap:6px}
+  .title{font-size:15px}
   .title small{display:none}
-  #players{top:auto;bottom:8px;right:8px;flex-direction:row;flex-wrap:wrap;max-width:60vw;gap:4px}
-  .pl{min-width:auto;padding:4px 7px;font-size:11px}
-  .pl .st{display:none}
-  #log{display:none}
-  .btn{padding:7px 10px;font-size:12px}
+  .turn-pill{padding:3px 8px;gap:5px}
+  .turn-dot{width:12px;height:12px}
+  #turnName{font-size:12px}
+  .phase{font-size:11px}
   .reinf{font-size:12px}
-  .turn-pill{padding:4px 8px}
+  .reinf b{font-size:15px}
+  .btn{padding:6px 9px;font-size:11px}
+  .icon-btn{width:31px;height:31px;font-size:15px;border-radius:8px}
+  #namesBtn{display:none}            /* names always on for mobile */
   .die{width:32px;height:32px;font-size:18px}
-  #infoPanel{width:200px;font-size:11px}
-  #infoPanel.collapsed{transform:translateX(-210px)}
-  .reinf-big .num{font-size:32px}
-  #banner{top:auto;bottom:64px;padding:7px 16px}
+
+  /* bigger, pannable map filling the screen */
+  #mapWrap{left:0;right:0;display:block;overflow:auto;-webkit-overflow-scrolling:touch;
+    touch-action:pan-x pan-y}
+  svg#map{width:1000px;min-width:1000px;height:auto}
+  .btxt{font-size:22px;stroke-width:3px}        /* bigger army numbers */
+  .badge{r:18}
+  .tname{font-size:14px;opacity:.96!important;stroke-width:3px}  /* bigger names, always visible */
+  .cname{font-size:22px}
+  .terr{stroke-width:2.6}
+
+  /* info panel: a slim slide-in, collapsed by default during play */
+  #infoPanel{width:200px;font-size:11px;top:50px;max-height:calc(100% - 60px)}
+  #infoPanel.collapsed{transform:translateX(-212px)}
+  .reinf-big .num{font-size:30px}
+
+  /* players: one compact scrollable strip pinned to the bottom */
+  #players{top:auto;bottom:6px;left:6px;right:6px;flex-direction:row;flex-wrap:nowrap;
+    max-width:none;gap:5px;overflow-x:auto;justify-content:center;background:none}
+  .pl{min-width:auto;padding:3px 8px;font-size:10px;border-radius:14px;flex:0 0 auto;
+    background:rgba(8,15,34,.9)}
+  .pl .nm{max-width:62px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pl .st{font-size:9px}
+  #log{display:none}
+
+  #banner{top:54px;bottom:auto;padding:7px 14px;max-width:90vw}
   #banner .bt{font-size:13px}
 }

@@ -292,8 +292,15 @@ function startGame(numPlayers, difficulty) {
 
   G.turn = 0; G.setsTraded = 0;
   buildMap();
-  // on phones the info panel starts collapsed so it never covers the board
-  $("infoPanel").classList.toggle("collapsed", window.matchMedia("(max-width:760px)").matches);
+  // on phones: collapse the side panel and centre the larger, pannable map
+  if (window.matchMedia("(max-width:760px)").matches) {
+    $("infoPanel").classList.add("collapsed");
+    const w = $("mapWrap");
+    requestAnimationFrame(() => {
+      w.scrollLeft = (w.scrollWidth - w.clientWidth) / 2;
+      w.scrollTop = (w.scrollHeight - w.clientHeight) / 2;
+    });
+  }
   renderPlayers();
   log(t('warBegins'));
   beginTurn();
@@ -1232,24 +1239,29 @@ function conquerFX(id) {
 }
 function marchFX(from, to) {
   const a = svgToScreen(from), b = svgToScreen(to);
+  const col = cur().color;
   const el = document.createElement("div");
-  el.className = "fx";
-  el.textContent = "🪖";
-  el.style.fontSize = "20px";
+  el.className = "march-disc";
+  el.style.background = `radial-gradient(circle at 35% 30%, #fff, ${col} 65%)`;
   el.style.left = a.x + "px"; el.style.top = a.y + "px";
-  el.style.animation = "none";
-  el.style.transition = "left .6s ease, top .6s ease, opacity .6s";
+  el.style.transition = "left .55s ease, top .55s ease, opacity .25s";
   $("stage").appendChild(el);
   requestAnimationFrame(() => { el.style.left = b.x + "px"; el.style.top = b.y + "px"; });
-  setTimeout(() => { el.style.opacity = "0"; }, 550);
-  setTimeout(() => el.remove(), 750);
+  setTimeout(() => { el.style.opacity = "0"; }, 560);
+  setTimeout(() => el.remove(), 820);
 }
+// reinforce feedback: a bright ring expands from the country + the badge pulses
 function popBadge(id) {
-  const t = els[id].txt;
-  t.style.transition = "none"; t.setAttribute("transform","scale(1)");
-  els[id].badge.animate(
-    [{transform:"scale(1)"},{transform:"scale(1.4)"},{transform:"scale(1)"}],
-    {duration:260, transformOrigin:"center"});
+  const sp = svgToScreen(id);
+  const ring = document.createElement("div");
+  ring.className = "placering";
+  ring.style.left = sp.x + "px"; ring.style.top = sp.y + "px";
+  $("stage").appendChild(ring);
+  setTimeout(() => ring.remove(), 640);
+  [els[id].badge, els[id].txt].forEach(el =>
+    el.animate(
+      [{ transform: "scale(1)" }, { transform: "scale(1.45)" }, { transform: "scale(1)" }],
+      { duration: 320, easing: "ease-out" }));
 }
 
 // ============================================================
